@@ -7,6 +7,3 @@ db = client.learning_tracker
 utenti = db.utenti
 
 risultato = utenti.find()
-
-for utente in risultato:
-    print(utente["nome"] + " " + utente["cognome"])
