@@ -1,5 +1,12 @@
-{
-    "nome": "Storia",
-    "livello": "base",
-    "tempo_studio": "20"
-}
+[
+    {
+        "nome": "Matematica",
+        "livello": "base",
+        "tempo_studio": 4
+    },
+    {
+        "nome": "Storia",
+        "livello": "intermedio",
+        "tempo_studio": 5
+    }
+]

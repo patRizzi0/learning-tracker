@@ -1,62 +1,78 @@
-#LEARNING TRACKER
+# LEARNING TRACKER
 
 import json
-
-#1) Utente deve inserire il dato!
-#2) Dato deve essere salvato in un file JSON
-#3) Utente deve poter visualizzare i dati salvati
-#4) Utente deve poter modificare i dati salvati
-
-
-def aggiungi_materia():
-    nome_materia = input("Inserisci il nome della materia: ")
-    livello_attuale = input("Inserisci il livello attuale (base, intermedio, avanzato): ")
-    tempo_studio = input("Inserisci il tempo di studio dedicato (in ore): ")
-    dump_materia(nome_materia, livello_attuale, tempo_studio)
-
-def dump_materia(nome_materia, livello_attuale, tempo_studio):
-    materia = {
-        "nome": nome_materia,
-        "livello": livello_attuale,
-        "tempo_studio": tempo_studio
-    }
-    
-    # Salva dati aggiornati
-    with open('backend/data.json', 'w') as file:
-        json.dump(materia, file, indent=4)
+import os
+from backend.services.create_sub import *
+from backend.services.delete_sub import *
+from backend.services.read_sub import *
 
 
-#aggiungi_materia()
+DATA_PATH = "backend/data.json"
 
 
-#Visualizza i dati salvati
-def visualizza_materie():
-    with open("backend/data.json", "r") as file:
-        dati = json.load(file)
-        
-    for materia in dati:
-        print(materia)
+# ----------------------------
+# UTILITIES
+# ----------------------------
 
-visualizza_materie()
+def leggi_materie():
+    materie = read_subjects()
+    print(materie)
+
+def aggiungi_materia():    
+    nome = input("Nome materia: ")
+    livello = input("Livello: ")
+    try:
+        tempo = int(input("Tempo studio (ore): "))
+    except ValueError:
+        print("Tempo studio deve essere un numero intero.")
+
+    create_subject(nome, livello, tempo)
+
+
+
+def rimuovi_materia():
+    id_sub = get_collection("materie")
+    print(id_sub)
 
 
 def organizza_studio():
-    with open("backend/data.json", "r") as file:
-        dati = json.load(file)
+    materie = leggi_materie()
 
-        for materia in dati:
-            livello = materia["livello"]
+    for materia in materie:
+        livello = materia["livello"]
 
-            print(livello)
-            if livello == "base":
-                print("Organizza sessioni di studio più brevi e frequenti.")
-            elif livello == "intermedio":
-                print("Aumenta gradualmente la durata delle sessioni di studio.")
-            elif livello == "avanzato":
-                print("Focalizzati su progetti pratici e approfondimenti.")
+        print(f"\nSuggerimenti per {materia['nome']}:")
+
+        if livello == "base":
+            print("Sessioni brevi e frequenti.")
+        elif livello == "intermedio":
+            print("Aumenta gradualmente la durata.")
+        elif livello == "avanzato":
+            print("Focalizzati su progetti pratici.")
+        else:
+            print("Livello non riconosciuto.")
 
 
-organizza_studio()
+            # ----------------------------
+            # MAIN
+            # ----------------------------
 
-def progresso():
-    
+if __name__ == "__main__":
+    while True:
+        print("\n1. Aggiungi materia")
+        print("2. Visualizza materie")
+        print("3. Organizza studio")
+        print("4. Esci")
+
+        scelta = input("Seleziona un'opzione: ")
+
+        if scelta == "1":
+            aggiungi_materia()
+        elif scelta == "2":
+            visualizza_materie()
+        elif scelta == "3":
+            organizza_studio()
+        elif scelta == "4":
+            break
+        else:
+            print("Scelta non valida.")
