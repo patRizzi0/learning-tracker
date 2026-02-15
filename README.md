@@ -9,3 +9,13 @@ Learning Tracker permetterà di:
 -Segnare il progresso passo passo, inserendo una sezione dedicata che per ogni materia l'utente può scrivere ciò che ha imparato, ciò che vorrà imparare, inserire delle immagini ecc...
 
 Questo mini-progetto lo faccio per sperimentare per la prima volta le funzionalità di un DB non relazionale, mongoDB, oltre ad usare il python con il framework flask
+
+
+
+Inserimento materie e utenti
+
+Lettura dati dal database
+
+Aggiornamento e cancellazione di documenti
+
+Funzioni modulari, indipendenti dall’interfaccia
