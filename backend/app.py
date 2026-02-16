@@ -2,21 +2,22 @@
 
 import json
 import os
-from backend.services.create_sub import *
-from backend.services.delete_sub import *
-from backend.services.read_sub import *
-
-
-DATA_PATH = "backend/data.json"
+from org_studio import *
+from services.create_sub import *
+from services.delete_sub import *
+from services.read_sub import *
 
 
 # ----------------------------
 # UTILITIES
 # ----------------------------
 
+
 def leggi_materie():
-    materie = read_subjects()
+    materie = read_subjects()   #read_sub()
     print(materie)
+
+
 
 def aggiungi_materia():    
     nome = input("Nome materia: ")
@@ -26,36 +27,38 @@ def aggiungi_materia():
     except ValueError:
         print("Tempo studio deve essere un numero intero.")
 
-    create_subject(nome, livello, tempo)
+    create_subject(nome, livello, tempo)    #create_sub()
 
 
 
 def rimuovi_materia():
     id_sub = get_collection("materie")
-    print(id_sub)
+    delete_subject(id_sub)      #delete_sub()
 
 
 def organizza_studio():
-    materie = leggi_materie()
+    # ottieni la collezione dal DB
+    materie = db["materie"]  # o get_collection("materie")
 
-    for materia in materie:
-        livello = materia["livello"]
+    # chiedi quale materia vuole studiare
+    nome_materia = input("Inserisci il nome della materia: ")
 
-        print(f"\nSuggerimenti per {materia['nome']}:")
+    # recupera il documento dal DB
+    materia_doc = materie.find_one({"nome": nome_materia})
 
-        if livello == "base":
-            print("Sessioni brevi e frequenti.")
-        elif livello == "intermedio":
-            print("Aumenta gradualmente la durata.")
-        elif livello == "avanzato":
-            print("Focalizzati su progetti pratici.")
-        else:
-            print("Livello non riconosciuto.")
+    if materia_doc is None:
+        print(f"Materia '{nome_materia}' non trovata!")
+        return
 
+    print(f"Livello della materia: {materia_doc['livello']}")
+    start_study_by_level(materia_doc)
 
-            # ----------------------------
-            # MAIN
-            # ----------------------------
+    
+
+# ----------------------------
+# MAIN
+# ----------------------------
+
 
 if __name__ == "__main__":
     while True:
@@ -69,7 +72,7 @@ if __name__ == "__main__":
         if scelta == "1":
             aggiungi_materia()
         elif scelta == "2":
-            visualizza_materie()
+            leggi_materie()
         elif scelta == "3":
             organizza_studio()
         elif scelta == "4":
