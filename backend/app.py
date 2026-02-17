@@ -2,6 +2,7 @@
 
 import json
 import os
+from progresso import *
 from org_studio import *
 from services.create_sub import *
 from services.delete_sub import *
@@ -53,6 +54,29 @@ def organizza_studio():
     print(f"Livello della materia: {materia_doc['livello']}")
     start_study_by_level(materia_doc)
 
+def progresso_studio():
+    materie = db["materie"]
+    nome_materia = input("Inserisci il nome della materia: ").strip()
+
+    for m in db["materie"].find():
+        if m["nome"].lower() == nome_materia.lower():
+            nome_materia = m["nome"]  # Usa il nome esatto dal DB
+            print(f"Materia trovata: {nome_materia}")
+            break
+
+    materia_doc = materie.find_one({"nome": {"$regex": f"^{nome_materia}$", "$options": "i"}})
+
+    if materia_doc is None:
+        print(f"Materia '{nome_materia}' non trovata!")
+        return
+
+    print(nome_materia)
+    visualizza_progressi(nome_materia)
+
+
+
+
+
     
 
 # ----------------------------
@@ -65,7 +89,7 @@ if __name__ == "__main__":
         print("\n1. Aggiungi materia")
         print("2. Visualizza materie")
         print("3. Organizza studio")
-        print("4. Esci")
+        print("4. Progresso studio")
 
         scelta = input("Seleziona un'opzione: ")
 
@@ -76,6 +100,6 @@ if __name__ == "__main__":
         elif scelta == "3":
             organizza_studio()
         elif scelta == "4":
-            break
+            progresso_studio()
         else:
             print("Scelta non valida.")
