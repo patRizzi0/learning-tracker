@@ -1,20 +1,26 @@
 from connection import db
 from datetime import datetime
-from progresso.aggiungi_progresso import aggiungi_progresso
-from progresso.visualizza_progressi import visualizza_progressi
+import gestione_progresso.aggiungi_progresso as ag
+import gestione_progresso.visualizza_progressi as vs
 
-def traccia_progressi(scelta):
+def traccia_progressi(nome_materia):
     materie = db["materie"]
-    nome_materia = input("Inserisci il nome della materia: ").strip()
     materia_doc = materie.find_one({"nome": nome_materia})
-    if(scelta == "1"):
-        aggiungi_progresso(materia_doc)
-    elif(scelta == "2"):
-        visualizza_progressi(materia_doc)
+
+    materia_str = materia_doc["nome"]   #Collection "MATERIE" -> campo "NOME"
+    materia_id = materia_doc["_id"]
+    
+    print(f"Materia: {nome_materia} (ID: {materia_id})")
+
+    if not materia_doc:
+        print("Materia non trovata.")
+        return
+
+    scelta = input("Vuoi aggiungere un nuovo progresso (1) o visualizzare i progressi esistenti (2)? ")
+
+    if scelta == "1":
+        ag.aggiungi_progresso(materia_str, materia_id)
+    elif scelta == "2":
+        vs.visualizza_progressi(materia_str, materia_id)
     else:
         print("Scelta non valida. Riprova.")
-
-
-scelta = input("Vuoi aggiungere un nuovo progresso (1) o visualizzare i progressi esistenti (2)? ")
-
-traccia_progressi(scelta)

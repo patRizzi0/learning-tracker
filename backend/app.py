@@ -1,7 +1,4 @@
 # LEARNING TRACKER
-
-import json
-import os
 from progresso import *
 from org_studio import *
 from services.create_sub import *
@@ -62,6 +59,7 @@ def progresso_studio():
         if m["nome"].lower() == nome_materia.lower():
             nome_materia = m["nome"]  # Usa il nome esatto dal DB
             print(f"Materia trovata: {nome_materia}")
+            traccia_progressi(nome_materia)
             break
 
     materia_doc = materie.find_one({"nome": {"$regex": f"^{nome_materia}$", "$options": "i"}})
@@ -71,7 +69,7 @@ def progresso_studio():
         return
 
     print(nome_materia)
-    visualizza_progressi(nome_materia)
+    
 
 
 

@@ -1,9 +1,9 @@
 from connection import db
 import time
 
-def visualizza_progressi(nome_materia):
+def visualizza_progressi(nome_materia, materia_id):
     progresso = db["progresso"]
-    progressi = list(progresso.find({"nome_materia": nome_materia}).sort("data", -1))  # ordina per data decrescente
+    progressi = list(progresso.find({"nome_materia": nome_materia, "materia_id": materia_id}).sort("data", -1))  # ordina per data decrescente
     if not progressi:
         print(f"Nessun progresso registrato per la materia '{nome_materia}'.")
         return
