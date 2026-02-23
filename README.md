@@ -19,3 +19,14 @@ Lettura dati dal database
 Aggiornamento e cancellazione di documenti
 
 Funzioni modulari, indipendenti dall’interfaccia
+
+
+
+
+app.py → solo avvio + route
+
+services/ → solo CRUD
+
+utilities/ → solo logica
+
+templates/ → solo interfaccia
