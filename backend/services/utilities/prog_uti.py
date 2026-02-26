@@ -1,5 +1,5 @@
 from connection import db
-from backend.progresso import traccia_progressi
+from progresso import traccia_progressi
 
 
 
@@ -22,3 +22,6 @@ def progresso_studio():
 
         print(nome_materia)
 
+def read_progress():
+    progressi = db["progresso"]
+    return list(progressi.find())
