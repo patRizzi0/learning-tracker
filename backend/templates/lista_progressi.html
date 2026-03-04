@@ -1,74 +1,134 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista Progressi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .page-title {
+            font-weight: 600;
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            transition: 0.2s ease;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="container mt-4">
-        <h1 class="mb-4">Lista Progressi</h1>
+<div class="container py-5">
 
-        <div class="row">
-
-            {% for p in progressi %}
-
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow">
-
-                    <div class="card-body">
-
-                        <h5 class="card-title">
-                            {{ p["titolo_progresso"] }}
-                        </h5>
-
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            {{ p["nome_materia"] }}
-                        </h6>
-
-                        <p class="card-text">
-                            {{ p["descrizione"] }}
-                        </p>
-
-                        <small class="text-muted">
-                            {{ p["data"] }}
-                        </small>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modificaModal">
-                            Modifica
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
-            {% endfor %}
-
-            <div class="modal fade" id="modificaModal" tabindex="-1">
-
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-
-                        <div class="modal-header">
-                            <h5 class="modal-title">Modifica Progresso</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            Qui metterai il form di modifica
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title">Lista Progressi</h2>
+        <a href="../" class="btn btn-outline-dark">Home</a>
     </div>
 
-    <a href="../" class="btn btn-primary">Home</a>
+    <!-- PROGRESSI -->
+    <div class="row g-4">
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        {% for p in progressi %}
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100" id="card-{{ p['_id'] }}">
+
+                <div class="card-body d-flex flex-column">
+
+                    <h5 class="card-title fw-bold">
+                        {{ p["titolo_progresso"] }}
+                    </h5>
+
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        {{ p["nome_materia"] }}
+                    </h6>
+
+                    <p class="card-text flex-grow-1">
+                        {{ p["descrizione"] }}
+                    </p>
+
+                    <small class="text-muted mb-3">
+                        {{ p["data"] }}
+                    </small>
+
+                    <!-- BOTTONI -->
+                    <div class="action-buttons">
+
+                        <button class="btn btn-primary btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modificaModal">
+                            Modifica
+                        </button>
+
+                        <button class="btn btn-danger btn-sm"
+                                onclick="eliminaProgresso('{{ p['_id'] }}')">
+                            Elimina
+                        </button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="modificaModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content rounded-4">
+
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Modifica Progresso</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                Qui metterai il form di modifica
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function eliminaProgresso(id) {
+    fetch(`/elimina_progressi/${id}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById("card-" + id).remove();
+        } else {
+            alert("Errore durante l'eliminazione del progresso");
+        }
+    });
+}
+</script>
+
 </body>
-
 </html>

@@ -2,12 +2,17 @@
 
 import datetime
 
-from flask import Flask, redirect, render_template, url_for
+
+from flask import Flask, jsonify, redirect, render_template, url_for
 from flask import request
+from services.utilities import edit_nota
+from services.operations import read_sub
 from services.utilities import read_nota
 from services.utilities import add_nota
 from services.operations import create_sub
+from gestione_progresso import elimina_progresso   
 from connection import db
+from flask import jsonify
 from services.utilities.prog_uti import read_progress
 
 
@@ -22,8 +27,19 @@ def lista_progressi():
     progressi = read_progress()
     return render_template("lista_progressi.html", progressi=progressi)
 
+
+
+@app.route("/elimina_progressi/<id>", methods=["DELETE"])
+def elimina_progressi(id):
+    elimina_progresso.elimina_progresso(id)
+    return jsonify({"success": True})
+
+
+
 @app.route("/materie", methods=["GET", "POST"])
 def materie():
+
+    materie = read_sub.read_subjects()
 
     if request.method == "POST":
 
@@ -38,7 +54,9 @@ def materie():
 
         return redirect(url_for("materie"))
 
-    return render_template("materie.html")
+    return render_template("materie.html", materie=materie)
+
+
 
 
 @app.route("/note", methods=["GET", "POST"])
@@ -60,6 +78,12 @@ def note():
     return render_template("note.html", note=note)
 
 
+@app.route("/modifica_nota/<id>", methods=["POST"])
+def modifica_nota(id):
+    data = request.get_json()
+    testo_nota = data.get("testo")
+    edit_nota.modifica_nota(id, testo_nota)
+    return jsonify({"success": True})
 
 if __name__ == "__main__":
     app.run(debug=True)

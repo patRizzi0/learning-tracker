@@ -1,79 +1,142 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Materie</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .page-title {
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            transition: 0.2s ease;
+        }
+
+        .add-btn {
+            border-radius: 30px;
+            padding: 10px 20px;
+        }
+    </style>
 </head>
 
 <body>
-    <button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal"
-        data-bs-target="#modificaModal">Aggiungi materia</button>
 
+    <div class="container py-5">
 
+        <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="page-title">Le tue materie</h2>
 
+            <button type="button"
+                class="btn btn-dark add-btn shadow-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#modificaModal">
+                + Aggiungi
+            </button>
+        </div>
 
+        <!-- CARD LIST -->
+        <div class="row g-4">
+            {% for m in materie %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">
+                            {{ m["nome"] }}
+                        </h5>
 
+                        <p class="card-text text-muted mb-2">
+                            Difficoltà: 
+                            <span class="badge bg-primary">
+                                {{ m["livello"] }}/10
+                            </span>
+                        </p>
 
+                        <p class="card-text">
+                            Tempo dedicato:
+                            <strong>{{ m["tempo_studio"] // 60 }}h {{ m["tempo_studio"] % 60 }}m</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- HOME BUTTON -->
+        <div class="mt-5">
+            <a href="../" class="btn btn-outline-dark">
+                ← Torna alla Home
+            </a>
+        </div>
+
+    </div>
+
+    <!-- MODAL -->
     <div class="modal fade" id="modificaModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4 shadow">
 
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Aggiungi materia</h5>
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-semibold">Aggiungi materia</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <div class="modal-body">
+                <div class="modal-body px-4 pb-4">
                     <form method="POST" action="/materie">
 
                         <div class="mb-3">
                             <label class="form-label">Nome materia</label>
-                            <input type="text" class="form-control" name="nome_materia">
+                            <input type="text" class="form-control" name="nome_materia" required>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Livello difficoltà</label>
-
                             <select class="form-select" name="difficolta">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
+                                {% for i in range(1,11) %}
+                                <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Tempo dedicato (ore)</label>
-                            <input type="number" class="form-control" name="ore" min="0">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Ore</label>
+                                <input type="number" class="form-control" name="ore" min="0" value="0">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Minuti</label>
+                                <input type="number" class="form-control" name="minuti" min="0" value="0">
+                            </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Tempo dedicato (minuti)</label>
-                            <input type="number" class="form-control" name="minuti" min="0">
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-dark px-4">
+                                Salva
+                            </button>
                         </div>
-
-                        <button type="submit" class="btn btn-primary">
-                            INVIA
-                        </button>
 
                     </form>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
-
-    <a href="../" class="btn btn-primary">Home</a>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
