@@ -1,53 +1,113 @@
 {% extends "base.html" %}
 
-{% block title %}
-Home - Learning Tracker
-{% endblock %}
+{% block title %}Home - Learning Tracker{% endblock %}
 
 {% block content %}
-    
-
 <div class="container mt-5">
-
     <h2 class="mb-4">Welcome to the Learning Tracker</h2>
+    <div class="container mt-4">
+        <div class="row">
 
-    <div class="row g-4">
+            <!-- SINISTRA -->
+            <div class="col-md-6">
+                <a href="/lista_progressi" class="card-link">
+                    <div class="card dashboard-card">
+                        <div class="card-img-container">
+                            <img src="{{ url_for('static', filename='images/progressi.jpg') }}" class="card-img">
 
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Progressi</h5>
-                    <a href="/lista_progressi" class="btn btn-primary">
-                        Vai
-                    </a>
-                </div>
+                            <div class="card-overlay">
+                                <h5>Progressi</h5>
+                                <p>Monitora i tuoi avanzamenti.</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="/materie" class="card-link">
+                    <div class="card dashboard-card">
+                        <div class="card-img-container">
+                            <img src="{{ url_for('static', filename='images/materie.jpg') }}" class="card-img">
+
+                            <div class="card-overlay">
+                                <h5>Materie</h5>
+                                <p>Gestisci le tue discipline di studio.</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="/note" class="card-link">
+                    <div class="card dashboard-card">
+
+                        <div class="card-img-container">
+                            <img src="{{ url_for('static', filename='images/noteb.jpg') }}" class="card-img">
+
+                            <div class="card-overlay">
+                                <h5>Note</h5>
+                                <p>Scrivi e organizza le tue idee.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </a>
             </div>
-        </div>
 
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Materie</h5>
-                    <a href="/materie" class="btn btn-primary">
-                        Vai
-                    </a>
-                </div>
+            <!-- DESTRA -->
+            <div class="col-md-6">
+                <canvas id="grafico"></canvas>
+                <script>
+                    fetch("/api/ore_settimanali")
+                        .then(res => res.json())
+                        .then(data => {
+
+                            new Chart(document.getElementById("grafico"), {
+                                type: "line",
+                                data: {
+                                    labels: data.labels,
+                                    datasets: [{
+
+                                        label: "Ore lavorate",
+                                        data: data.values,
+                                        borderColor: "#2c3e50",
+                                        backgroundColor: "rgba(44,62,80,0.1)",
+                                        tension: 0.3,
+                                        fill: true,
+                                        pointRadius: 4
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    plugins: {
+                                        legend: {
+                                            display: true
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    x: {
+                                        ticks: {
+                                            color: "#555",
+                                            maxRotation: 45,
+                                            autoSkip: true
+                                        },
+                                        grid: {
+                                            display: false
+                                        }
+                                    },
+                                    y: {
+                                        beginAtZero: true,
+                                        grid: {
+                                            color: "rgba(0,0,0,0.05)"
+                                        }
+                                    }
+                                }
+                            });
+
+                        });
+                </script>
             </div>
-        </div>
 
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Note</h5>
-                    <a href="/note" class="btn btn-primary">
-                        Vai
-                    </a>
-                </div>
-            </div>
         </div>
-
     </div>
-
 </div>
-
 {% endblock %}

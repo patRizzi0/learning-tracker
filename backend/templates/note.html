@@ -1,102 +1,102 @@
-<!DOCTYPE html>
-<html lang="it">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Note</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}Home - Learning Tracker{% endblock %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+{% block content %}
 
-<body>
+<div class="container mt-4">
 
-    <div class="container mt-4">
+    <!-- GRID NOTE -->
+    <div id="noteGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
 
-        <!-- GRID NOTE -->
-        <div id="noteGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <!-- Bottone + -->
+        <button class="btn btn-light border w-100 h-100 fs-1 shadow-sm" style="min-height:150px" data-bs-toggle="modal"
+            data-bs-target="#notaModal">
+            +
+        </button>
 
-            <!-- Bottone + -->
-            <button class="btn btn-light border w-100 h-100 fs-1 shadow-sm" style="min-height:150px"
-                data-bs-toggle="modal" data-bs-target="#notaModal">
-                +
-            </button>
+        <!-- NOTE DAL BACKEND -->
+        {% for n in note %}
+        <div class="col">
+            <div class="card note-card p-3">
 
-            <!-- NOTE DAL BACKEND -->
-            {% for n in note %}
-            <div class="col">
-                <div class="card shadow-sm p-3" style="min-height:150px">
-                    <small class="text-muted">{{ n["data_creazione"] }}</small>
-                    <hr>
-                    <p class="mb-0" id="notaTesto{{ n['_id'] }}">{{ n["testo"] }}</p>
-                    <button class="btn btn-sm btn-outline-secondary mt-2 edit-btn" data-id="{{ n['_id'] }}"
-                        onclick="modificaNota('{{ n['_id'] }}')">
-                        Modifica
+                <small class="text-muted">
+                    {{ n["data_creazione"] }}
+                </small>
+
+                <hr>
+
+                <p class="mb-0" id="notaTesto{{ n['_id'] }}">
+                    {{ n["testo"] }}
+                </p>
+
+                <button class="btn btn-sm btn-outline-dark mt-2 edit-btn" data-id="{{ n['_id'] }}"
+                    onclick="modificaNota('{{ n['_id'] }}')">
+                    Modifica
+                </button>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="notaModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form method="POST" action="/note">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Nuova Nota</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <textarea name="notaTesto" class="form-control" rows="5" required></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">
+                        Salva
                     </button>
                 </div>
-            </div>
-            {% endfor %}
+
+            </form>
+
         </div>
     </div>
-
-    <!-- MODAL -->
-    <div class="modal fade" id="notaModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <form method="POST" action="/note">
-
-                    <div class="modal-header">
-                        <h5 class="modal-title">Nuova Nota</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <textarea name="notaTesto" class="form-control" rows="5" required></textarea>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">
-                            Salva
-                        </button>
-                    </div>
-
-                </form>
-
-            </div>
-        </div>
-    </div>
+</div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function modificaNota(id) {
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function modificaNota(id) {
 
-            const nuovaNota = prompt("Inserisci il nuovo testo della nota:");
+        const nuovaNota = prompt("Inserisci il nuovo testo della nota:");
 
-            if (!nuovaNota) return;
+        if (!nuovaNota) return;
 
-            fetch(`/modifica_nota/${id}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    testo: nuovaNota
-                })
+        fetch(`/modifica_nota/${id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                testo: nuovaNota
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const notaTesto = document.getElementById("notaTesto" + id);
-                        notaTesto.textContent = nuovaNota;
-                    } else {
-                        alert("Errore nella modifica");
-                    }
-                });
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const notaTesto = document.getElementById("notaTesto" + id);
+                    notaTesto.textContent = nuovaNota;
+                } else {
+                    alert("Errore nella modifica");
+                }
+            });
 
-        }
-    </script>
-</body>
-
-</html>
+    }
+</script>
+{% endblock %}

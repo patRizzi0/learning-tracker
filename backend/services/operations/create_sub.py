@@ -1,17 +1,15 @@
 from connection import db
 
-def get_collection(name):
-    if name not in db.list_collection_names():
-        db.create_collection(name)
-
-    return db[name]
-
-
-def create_subject(nome, livello, tempo):
-    materia = get_collection("materie")
-
-    materia.insert_one({
+def create_subject(user_id, nome, livello, tempo):
+    if not user_id:
+        raise ValueError("user_id mancante")
+    
+    materia_doc = {
+        "userId": user_id,
         "nome": nome,
         "livello": livello,
         "tempo_studio": tempo
-    })
+    }
+
+    result = db["materie"].insert_one(materia_doc)
+    return result.inserted_id

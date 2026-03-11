@@ -1,7 +1,187 @@
+/* =========================
+   COLORI GLOBALI
+========================= */
+
 :root {
-    --primary: #2c43ab;
+    --primary: #2c3e50;
+    --secondary: #18bc9c;
+    --background: #f4f6f9;
+    --text: #2d3436;
 }
 
-.navbar-custom {
-    background-color: var(--primary);
+/* =========================
+   BASE
+========================= */
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.container {
+    margin-top: 30px;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+    background-color: var(--primary) !important;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: white !important;
+}
+
+.navbar .nav-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: 0.2s;
+}
+
+.navbar .nav-link:hover {
+    color: var(--secondary) !important;
+}
+
+/* =========================
+   CARD GENERALI
+========================= */
+
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transition: 0.25s ease;
+}
+
+.card:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.card-title {
+    font-weight: 600;
+}
+
+/* Card cliccabili */
+.card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Dashboard card */
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+/* =========================
+   GRAFICO
+========================= */
+
+.chart-card {
+    border-radius: 15px;
+}
+
+.chart-img {
+    border-radius: 12px;
+}
+
+/* =========================
+   IMMAGINI OVERLAY
+========================= */
+
+.card-img-container {
+    position: relative;
+}
+
+.card-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+}
+
+
+/* ===== NOTE STYLE iOS ===== */
+
+.note-card {
+    background-color: #f4e988;
+    /* giallo chiaro */
+    border-radius: 16px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    transition: 0.2s ease;
+}
+
+.note-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+.note-card .card-title {
+    color: #2c3e50;
+}
+
+.note-card .card-text {
+    color: #333;
+}
+
+/* =========================
+   BOTTONI
+========================= */
+
+.btn-primary {
+    background-color: var(--secondary);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #139a7f;
+}
+
+.btn-danger {
+    border-radius: 8px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+input,
+textarea,
+select {
+    border-radius: 8px !important;
+}
+
+/* =========================
+   TABELLE
+========================= */
+
+table {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    margin-top: 40px;
+    padding: 20px;
+    text-align: center;
+    color: #777;
 }
